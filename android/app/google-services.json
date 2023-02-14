@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "388295453738",
+    "firebase_url": "https://jobfair-915fd-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "jobfair-915fd",
+    "storage_bucket": "jobfair-915fd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:388295453738:android:6d3b394b5766990a082753",
+        "android_client_info": {
+          "package_name": "com.example.job_fair"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "388295453738-gvb44rlspij8c1m17i0nccj1dvf84m1m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.job_fair",
+            "certificate_hash": "6f6c8d0cd34168787a909c34b8587748fdc14e5a"
+          }
+        },
+        {
+          "client_id": "388295453738-spil5u4jlp109gktd4erlvkc3po9pr7v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJ1lK5yiHfC--zBx5SnypsNtRIJ84ajNU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "388295453738-spil5u4jlp109gktd4erlvkc3po9pr7v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
