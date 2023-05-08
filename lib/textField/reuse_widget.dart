@@ -7,18 +7,19 @@ TextField reuseWidget(String text, IconData icon, bool isPasswordType,
     obscureText: isPasswordType,
     enableSuggestions: !isPasswordType,
     autocorrect: !isPasswordType,
-    cursorColor: Colors.white,
-    style: TextStyle(color: Colors.white.withOpacity(0.9)),
+    cursorColor: Colors.black,
+    style: TextStyle(color: Colors.black.withOpacity(0.9)),
     decoration: InputDecoration(
       prefixIcon: Icon(
         icon,
-        color: Colors.white70,
+        color: Color.fromARGB(255, 103, 174, 232),
       ),
       labelText: text,
-      labelStyle: TextStyle(color: Colors.white.withOpacity(0.9)),
+      labelStyle:
+          TextStyle(color: Color.fromARGB(255, 13, 13, 13).withOpacity(0.9)),
       filled: true,
       floatingLabelBehavior: FloatingLabelBehavior.never,
-      fillColor: Colors.white.withOpacity(0.3),
+      fillColor: Color.fromARGB(255, 68, 162, 224).withOpacity(0.3),
       border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30.0),
           borderSide: const BorderSide(width: 0, style: BorderStyle.none)),
@@ -42,7 +43,7 @@ Container reuseButton(BuildContext context, bool isLogin, Function onTap) {
         child: Text(
           isLogin ? 'LOG IN' : 'SIGN UP',
           style: const TextStyle(
-              color: Colors.black12, fontWeight: FontWeight.bold, fontSize: 16),
+              color: Colors.blue, fontWeight: FontWeight.bold, fontSize: 16),
         ),
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.resolveWith((states) {
