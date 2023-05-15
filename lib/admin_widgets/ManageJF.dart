@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'JobPostingPage.dart';
+import 'list.dart';
 
 class ManageJF extends StatelessWidget {
   @override
@@ -31,7 +32,12 @@ class ManageJF extends StatelessWidget {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // TODO: Implement view job fairs functionality
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => list(),
+                  ),
+                );
               },
               child: Text('View the Job Fairs'),
             ),
