@@ -6,10 +6,9 @@ import 'SidebarMenu.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:open_file/open_file.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class ApplicantsListPage extends StatefulWidget {
   final String jobFairId;
@@ -148,6 +147,7 @@ class _ApplicantsListPageState extends State<ApplicantsListPage> {
             name: userData['name'] ?? '',
             email: userData['email'] ?? '',
             resumeUrl: userData['resume_url'] ?? '',
+            special: userData['specialization'] ?? '',
             skills: userData['skills'] is List<String>
                 ? List<String>.from(userData['skills'])
                 : [],
@@ -206,6 +206,7 @@ class Applicant {
   final String name;
   final String email;
   final String resumeUrl;
+  final String special;
   final List<String> skills;
 
   Applicant({
@@ -213,16 +214,36 @@ class Applicant {
     required this.name,
     required this.email,
     required this.resumeUrl,
+    required this.special,
     required this.skills,
   });
 }
 
-Future<void> _launchResume(String url) async {
-  if (await canLaunch(url)) {
-    await launch(url);
-  } else {
-    throw 'Could not launch $url';
+class PDFViewerScreen extends StatelessWidget {
+  final String pdfUrl;
+
+  const PDFViewerScreen({required this.pdfUrl});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('PDF Viewer'),
+      ),
+      body: InAppWebView(
+        initialUrlRequest: URLRequest(url: Uri.parse(pdfUrl)),
+      ),
+    );
   }
+}
+
+void _launchResume(BuildContext context, String url) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => PDFViewerScreen(pdfUrl: url),
+    ),
+  );
 }
 
 class ApplicantDetailsPage extends StatelessWidget {
@@ -284,6 +305,26 @@ class ApplicantDetailsPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 8),
+            RichText(
+              text: TextSpan(
+                children: <TextSpan>[
+                  TextSpan(
+                    text: 'Specialization',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  TextSpan(
+                    text: " ${applicant.special}",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w300),
+                  ),
+                ],
+              ),
+            ),
             // RichText(
             //   text: TextSpan(
             //     children: <TextSpan>[
@@ -311,9 +352,9 @@ class ApplicantDetailsPage extends StatelessWidget {
             ),
             SizedBox(height: 8),
             ElevatedButton(
-              child: Text("Download"),
+              child: Text("View"),
               onPressed: () {
-                _launchResume(applicant.resumeUrl);
+                _launchResume(context, applicant.resumeUrl);
               },
             ),
             SizedBox(height: 16),

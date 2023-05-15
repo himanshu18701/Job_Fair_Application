@@ -68,7 +68,7 @@ class _ApplicantsPageState extends State<ApplicantsPage> {
                   document.data() as Map<String, dynamic>;
               _jobFairs.add({
                 'id': document.id,
-                'name': data['name'],
+                'name': data['location'],
                 'location': data['location'],
                 'date': data['dateAndTime'],
                 'details': data['additionalInformation'],
