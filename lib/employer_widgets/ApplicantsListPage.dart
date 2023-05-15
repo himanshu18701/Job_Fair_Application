@@ -4,9 +4,12 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'SidebarMenu.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:dio/dio.dart';
 import 'dart:io';
+import 'package:dio/dio.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+import 'package:open_file/open_file.dart';
 
 class ApplicantsListPage extends StatefulWidget {
   final String jobFairId;
@@ -138,12 +141,13 @@ class _ApplicantsListPageState extends State<ApplicantsListPage> {
         Map<String, dynamic>? userData = await fetchUserDetails(userId);
         print('User data: $userData');
         print('User data jobFair: ${userData?['jobFair'] ?? 'Not set'}');
+        print('User data skills: ${userData?['skills'] ?? 'Not set'}');
         if (userData != null && userData['role'] == 'Student') {
           applicants.add(Applicant(
             id: userId,
             name: userData['name'] ?? '',
             email: userData['email'] ?? '',
-            resumeUrl: userData['resumeUrl'] ?? '',
+            resumeUrl: userData['resume_url'] ?? '',
             skills: userData['skills'] is List<String>
                 ? List<String>.from(userData['skills'])
                 : [],
@@ -156,20 +160,32 @@ class _ApplicantsListPageState extends State<ApplicantsListPage> {
 
   Future<void> _downloadResume(String resumeUrl, String fileName) async {
     try {
-      Dio dio = Dio();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String appDocPath = appDocDir.path;
-      String filePath = '$appDocPath/$fileName.pdf';
+      // Get the directory for the Downloads folder on Android
+      Directory downloadsDirectory;
+      if (Platform.isAndroid) {
+        downloadsDirectory = (await getExternalStorageDirectory())!;
+      } else {
+        downloadsDirectory = await getApplicationDocumentsDirectory();
+      }
+      String downloadPath = downloadsDirectory.path;
 
+      // Download the file using Dio
+      Dio dio = Dio();
+      String filePath = '$downloadPath/$fileName.pdf';
       await dio.download(resumeUrl, filePath);
 
+      // Show a success message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Resume downloaded successfully.'),
           backgroundColor: Colors.green,
         ),
       );
+
+      // Open the downloaded file using the device's default PDF viewer
+      await OpenFile.open(filePath);
     } catch (e) {
+      // Show an error message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Failed to download resume: $e'),
@@ -268,26 +284,26 @@ class ApplicantDetailsPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 8),
-            RichText(
-              text: TextSpan(
-                children: <TextSpan>[
-                  TextSpan(
-                    text: 'Skills:',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600),
-                  ),
-                  TextSpan(
-                    text: " ${applicant.skills.join(", ")}",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w300),
-                  ),
-                ],
-              ),
-            ),
+            // RichText(
+            //   text: TextSpan(
+            //     children: <TextSpan>[
+            //       TextSpan(
+            //         text: 'Skills:',
+            //         style: TextStyle(
+            //             color: Colors.black,
+            //             fontSize: 18,
+            //             fontWeight: FontWeight.w600),
+            //       ),
+            //       TextSpan(
+            //         text: " ${applicant.skills.join(", ")}",
+            //         style: TextStyle(
+            //             color: Colors.black,
+            //             fontSize: 18,
+            //             fontWeight: FontWeight.w300),
+            //       ),
+            //     ],
+            //   ),
+            // ),
             SizedBox(height: 16),
             Text(
               "Resume:",

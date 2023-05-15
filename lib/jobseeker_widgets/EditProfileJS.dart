@@ -66,9 +66,6 @@ class _EEditProfilePageState extends State<EEditProfilePage> {
           .where((skill) => skill.isNotEmpty)
           .toList();
     });
-
-    _skillList =
-        _skillsController.text.split(',').map((skill) => skill.trim()).toList();
   }
 
   @override
